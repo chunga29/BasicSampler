@@ -22,10 +22,16 @@ BasicSamplerAudioProcessor::BasicSamplerAudioProcessor()
                        )
 #endif
 {
+    mFormatManager.registerBasicFormats();
+    
+    for (int i = 0; i < mNumVoices; i++) {
+        mSampler.addVoice(new juce::SamplerVoice());
+    }
 }
 
 BasicSamplerAudioProcessor::~BasicSamplerAudioProcessor()
 {
+    mFormatReader = nullptr;
 }
 
 //==============================================================================
@@ -95,6 +101,7 @@ void BasicSamplerAudioProcessor::prepareToPlay (double sampleRate, int samplesPe
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
+    mSampler.setCurrentPlaybackSampleRate(sampleRate);
 }
 
 void BasicSamplerAudioProcessor::releaseResources()
@@ -144,18 +151,7 @@ void BasicSamplerAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
-    // This is the place where you'd normally do the guts of your plugin's
-    // audio processing...
-    // Make sure to reset the state if your inner loop is processing
-    // the samples and the outer loop is handling the channels.
-    // Alternatively, you can process the samples with the channels
-    // interleaved by keeping the same state.
-    for (int channel = 0; channel < totalNumInputChannels; ++channel)
-    {
-        auto* channelData = buffer.getWritePointer (channel);
-
-        // ..do something to the data...
-    }
+    mSampler.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 }
 
 //==============================================================================
@@ -181,6 +177,22 @@ void BasicSamplerAudioProcessor::setStateInformation (const void* data, int size
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
+}
+
+void BasicSamplerAudioProcessor::loadFile()
+{
+    using namespace juce;
+    
+    FileChooser chooser { "Please load a file" };
+    if (chooser.browseForFileToOpen()) {
+        auto file = chooser.getResult();
+        mFormatReader = mFormatManager.createReaderFor(file);
+    }
+    
+    BigInteger range;
+    range.setRange(0, 128, true);
+    
+    mSampler.addSound(new SamplerSound("Sample", *mFormatReader, range, 60, 0.0, 0.1, 10.0));
 }
 
 //==============================================================================

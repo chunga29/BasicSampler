@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="neJzUZ" name="BasicSampler" projectType="audioplug" useAppConfig="0"
-              addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1">
+              addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1"
+              pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn"
+              pluginManufacturer="Senza" defines="JUCE_MODAL_LOOPS_PERMITTED=1">
   <MAINGROUP id="zqCZdZ" name="BasicSampler">
     <GROUP id="{82A9122C-9A77-18F0-19EA-27BF0A3B84F2}" name="Source">
       <FILE id="oCDmUA" name="PluginProcessor.cpp" compile="1" resource="0"
