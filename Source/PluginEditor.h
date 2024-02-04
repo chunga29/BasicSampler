@@ -33,8 +33,17 @@ private:
     juce::TextButton mLoadButton { "Load " };
     std::vector<float> mAudioPoints;
     bool mShouldBePainting { false };
-    // This reference is provided as a quick way for your editor to
-    // access the processor object that created it.
+    
+    juce::Slider mAttackSlider,
+                 mDecaySlider,
+                 mSustainSlider,
+                 mReleaseSlider;
+    
+    juce::Label mAttackLabel,
+                mDecayLabel,
+                mSustainLabel,
+                mReleaseLabel;
+    
     BasicSamplerAudioProcessor& audioProcessor;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (BasicSamplerAudioProcessorEditor)
