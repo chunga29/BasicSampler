@@ -202,6 +202,11 @@ void BasicSamplerAudioProcessor::loadFile(const juce::String &path)
     auto file = File (path);
     mFormatReader = mFormatManager.createReaderFor(file);
     
+    auto sampleLength = static_cast<int>(mFormatReader->lengthInSamples);
+    
+    mWaveForm.setSize(1, sampleLength);
+    mFormatReader->read(&mWaveForm, 0, sampleLength, 0, true, false);
+    
     BigInteger range;
     range.setRange(0, 128, true);
     

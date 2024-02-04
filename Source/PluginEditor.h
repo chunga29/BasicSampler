@@ -31,6 +31,8 @@ public:
 
 private:
     juce::TextButton mLoadButton { "Load " };
+    std::vector<float> mAudioPoints;
+    bool mShouldBePainting { false };
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     BasicSamplerAudioProcessor& audioProcessor;

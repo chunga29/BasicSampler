@@ -19,7 +19,7 @@ BasicSamplerAudioProcessorEditor::BasicSamplerAudioProcessorEditor (BasicSampler
     
     addAndMakeVisible(mLoadButton);
     
-    setSize (200, 200);
+    setSize (600, 200);
 }
 
 BasicSamplerAudioProcessorEditor::~BasicSamplerAudioProcessorEditor()
@@ -32,13 +32,31 @@ void BasicSamplerAudioProcessorEditor::paint (juce::Graphics& g)
     // (Our component is opaque, so we must completely fill the background with a solid colour)
     g.fillAll (juce::Colours::black);
     g.setColour(juce::Colours::white);
-    g.setFont(15.f);
     
-    if (audioProcessor.getNumSamplerSounds() > 0) {
-        g.fillAll(juce::Colours::red);
-        g.drawText("Sound Loaded", getBounds(), juce::Justification::centred);
-    } else {
-        g.drawText("Load a sound", getBounds(), juce::Justification::centred);
+    if (mShouldBePainting) {
+        juce::Path p;
+        mAudioPoints.clear();
+        
+        auto waveform = audioProcessor.getWaveForm();
+        auto ratio = waveform.getNumSamples() / getWidth();
+        auto buffer = waveform.getReadPointer(0);
+        
+        // Scale audio file to window on x axis
+        for (int sample = 0; sample < waveform.getNumSamples(); sample += ratio) {
+            mAudioPoints.push_back(buffer[sample]);
+        }
+        
+        p.startNewSubPath(0, getHeight() / 2);
+        
+        // Scale audio on y axis
+        for (int sample = 0; sample < mAudioPoints.size(); ++sample) {
+            auto point = juce::jmap<float>(mAudioPoints[sample], -1.f, 1.f, 200, 0);
+            p.lineTo(sample, point);
+        }
+        
+        g.strokePath(p, juce::PathStrokeType(2));
+        
+        mShouldBePainting = false;
     }
 }
 
@@ -64,6 +82,7 @@ void BasicSamplerAudioProcessorEditor::filesDropped(const juce::StringArray& fil
 {
     for (auto file : files) {
         if (isInterestedInFileDrag(file)) {
+            mShouldBePainting = true;
             audioProcessor.loadFile(file);
         }
     }
