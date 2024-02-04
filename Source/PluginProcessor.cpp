@@ -182,12 +182,25 @@ void BasicSamplerAudioProcessor::setStateInformation (const void* data, int size
 void BasicSamplerAudioProcessor::loadFile()
 {
     using namespace juce;
-    
+    mSampler.clearSounds();
     FileChooser chooser { "Please load a file" };
     if (chooser.browseForFileToOpen()) {
         auto file = chooser.getResult();
         mFormatReader = mFormatManager.createReaderFor(file);
     }
+    
+    BigInteger range;
+    range.setRange(0, 128, true);
+    
+    mSampler.addSound(new SamplerSound("Sample", *mFormatReader, range, 60, 0.0, 0.1, 10.0));
+}
+
+void BasicSamplerAudioProcessor::loadFile(const juce::String &path)
+{
+    using namespace juce;
+    mSampler.clearSounds();
+    auto file = File (path);
+    mFormatReader = mFormatManager.createReaderFor(file);
     
     BigInteger range;
     range.setRange(0, 128, true);
