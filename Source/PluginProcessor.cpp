@@ -99,9 +99,8 @@ void BasicSamplerAudioProcessor::changeProgramName (int index, const juce::Strin
 //==============================================================================
 void BasicSamplerAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    // Use this method as the place to do any pre-playback
-    // initialisation that you need..
     mSampler.setCurrentPlaybackSampleRate(sampleRate);
+    updateADSR();
 }
 
 void BasicSamplerAudioProcessor::releaseResources()
@@ -148,6 +147,8 @@ void BasicSamplerAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     // This is here to avoid people getting screaming feedback
     // when they first compile a plugin, but obviously you don't need to keep
     // this code if your algorithm always overwrites all the output channels.
+    updateADSR();
+    
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
@@ -211,6 +212,15 @@ void BasicSamplerAudioProcessor::loadFile(const juce::String &path)
     range.setRange(0, 128, true);
     
     mSampler.addSound(new SamplerSound("Sample", *mFormatReader, range, 60, 0.0, 0.1, 10.0));
+}
+
+void BasicSamplerAudioProcessor::updateADSR()
+{
+    for (int i = 0; i < mSampler.getNumSounds(); ++i) {
+        if (auto sound = dynamic_cast<juce::SamplerSound*>(mSampler.getSound(i).get())) {
+            sound->setEnvelopeParameters(mADSRParams);
+        }
+    }
 }
 
 //==============================================================================
