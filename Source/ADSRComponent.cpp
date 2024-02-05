@@ -17,6 +17,7 @@ ADSRComponent::ADSRComponent(BasicSamplerAudioProcessor& p) : audioProcessor(p)
     // Attack Slider
     mAttackSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     mAttackSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 40, 20);
+    mAttackSlider.setColour(juce::Slider::ColourIds::textBoxTextColourId, juce::Colours::black);
     mAttackSlider.setColour(juce::Slider::ColourIds::thumbColourId, juce::Colours::red);
     mAttackSlider.setRange(0.0f, 5.0f, 0.01f);
     addAndMakeVisible(mAttackSlider);
@@ -32,6 +33,7 @@ ADSRComponent::ADSRComponent(BasicSamplerAudioProcessor& p) : audioProcessor(p)
     // Decay Slider
     mDecaySlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     mDecaySlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 40, 20);
+    mDecaySlider.setColour(juce::Slider::ColourIds::textBoxTextColourId, juce::Colours::black);
     mDecaySlider.setColour(juce::Slider::ColourIds::thumbColourId, juce::Colours::red);
     mDecaySlider.setRange(0.0f, 5.0f, 0.01f);
     addAndMakeVisible(mDecaySlider);
@@ -47,6 +49,7 @@ ADSRComponent::ADSRComponent(BasicSamplerAudioProcessor& p) : audioProcessor(p)
     // Sustain Slider
     mSustainSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     mSustainSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 40, 20);
+    mSustainSlider.setColour(juce::Slider::ColourIds::textBoxTextColourId, juce::Colours::black);
     mSustainSlider.setColour(juce::Slider::ColourIds::thumbColourId, juce::Colours::red);
     mSustainSlider.setRange(0.0f, 1.0f, 0.01f);
     addAndMakeVisible(mSustainSlider);
@@ -62,6 +65,7 @@ ADSRComponent::ADSRComponent(BasicSamplerAudioProcessor& p) : audioProcessor(p)
     // Release Slider
     mReleaseSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     mReleaseSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 40, 20);
+    mReleaseSlider.setColour(juce::Slider::ColourIds::textBoxTextColourId, juce::Colours::black);
     mReleaseSlider.setColour(juce::Slider::ColourIds::thumbColourId, juce::Colours::red);
     mReleaseSlider.setRange(0.0f, 5.0f, 0.01f);
     addAndMakeVisible(mReleaseSlider);

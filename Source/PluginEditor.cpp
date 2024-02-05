@@ -29,7 +29,7 @@ BasicSamplerAudioProcessorEditor::BasicSamplerAudioProcessorEditor (BasicSampler
     
     startTimerHz(30);
     
-    setSize (600, 400);
+    setSize (800, 600);
 }
 
 BasicSamplerAudioProcessorEditor::~BasicSamplerAudioProcessorEditor()

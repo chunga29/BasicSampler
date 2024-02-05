@@ -42,7 +42,7 @@ void WaveThumbnail::paint (juce::Graphics& g)
             mAudioPoints.push_back(buffer[sample]);
         }
         
-        g.setColour(juce::Colours::yellow);
+        g.setColour(juce::Colours::white);
         p.startNewSubPath(0, getHeight() / 2);
         
         // Scale audio on y axis

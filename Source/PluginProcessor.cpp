@@ -32,7 +32,7 @@ BasicSamplerAudioProcessor::BasicSamplerAudioProcessor()
 
 BasicSamplerAudioProcessor::~BasicSamplerAudioProcessor()
 {
-    mFormatReader = nullptr;
+    delete mFormatReader;
 }
 
 //==============================================================================
@@ -248,7 +248,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout BasicSamplerAudioProcessor::
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{ "ATTACK", 1 }, "Attack", 0.0f, 5.0f, 0.0f));
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{ "DECAY", 1 }, "Decay", 0.0f, 3.0f, 2.0f));
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{ "SUSTAIN", 1 }, "Sustain", 0.0f, 1.0f, 1.0f));
-    parameters.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{ "RELEASE", 1 }, "Release", 0.0f, 5.0f, 2.0f));
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{ "RELEASE", 1 }, "Release", 0.0f, 5.0f, 0.75f));
     
     return { parameters.begin(), parameters.end() };
 }
