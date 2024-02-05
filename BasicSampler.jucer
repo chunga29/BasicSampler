@@ -6,6 +6,12 @@
               pluginManufacturer="Senza" defines="JUCE_MODAL_LOOPS_PERMITTED=1">
   <MAINGROUP id="zqCZdZ" name="BasicSampler">
     <GROUP id="{82A9122C-9A77-18F0-19EA-27BF0A3B84F2}" name="Source">
+      <FILE id="tvRFq8" name="ADSRComponent.cpp" compile="1" resource="0"
+            file="Source/ADSRComponent.cpp"/>
+      <FILE id="R4lTGN" name="ADSRComponent.h" compile="0" resource="0" file="Source/ADSRComponent.h"/>
+      <FILE id="KAcbpt" name="WaveThumbnail.cpp" compile="1" resource="0"
+            file="Source/WaveThumbnail.cpp"/>
+      <FILE id="lX8FO2" name="WaveThumbnail.h" compile="0" resource="0" file="Source/WaveThumbnail.h"/>
       <FILE id="oCDmUA" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="l0F0hH" name="PluginProcessor.h" compile="0" resource="0"

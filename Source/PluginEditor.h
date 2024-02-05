@@ -10,13 +10,14 @@
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
+#include "WaveThumbnail.h"
+#include "ADSRComponent.h"
 
 //==============================================================================
 /**
 */
 class BasicSamplerAudioProcessorEditor  : public juce::AudioProcessorEditor,
-                                          public juce::FileDragAndDropTarget,
-                                          public juce::Slider::Listener
+                                          public juce::Timer
 {
 public:
     BasicSamplerAudioProcessorEditor (BasicSamplerAudioProcessor&);
@@ -26,26 +27,11 @@ public:
     void paint (juce::Graphics&) override;
     void resized() override;
     
-    bool isInterestedInFileDrag(const juce::StringArray& files) override;
-    void filesDropped (const juce::StringArray& files, int x, int y) override;
+    void timerCallback() override;
     
-    void sliderValueChanged (juce::Slider* slider) override;
-    
-
 private:
-    juce::TextButton mLoadButton { "Load " };
-    std::vector<float> mAudioPoints;
-    bool mShouldBePainting { false };
-    
-    juce::Slider mAttackSlider,
-                 mDecaySlider,
-                 mSustainSlider,
-                 mReleaseSlider;
-    
-    juce::Label mAttackLabel,
-                mDecayLabel,
-                mSustainLabel,
-                mReleaseLabel;
+    WaveThumbnail mWaveThumbnail;
+    ADSRComponent mADSR;
     
     BasicSamplerAudioProcessor& audioProcessor;
 

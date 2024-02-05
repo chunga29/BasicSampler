@@ -19,10 +19,11 @@ BasicSamplerAudioProcessor::BasicSamplerAudioProcessor()
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ), mAPVTS(*this, nullptr, "PARAMETERS", createParameters())
 #endif
 {
     mFormatManager.registerBasicFormats();
+    mAPVTS.state.addListener(this);
     
     for (int i = 0; i < mNumVoices; i++) {
         mSampler.addVoice(new juce::SamplerVoice());
@@ -141,16 +142,26 @@ void BasicSamplerAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
-    // In case we have more outputs than inputs, this code clears any output
-    // channels that didn't contain input data, (because these aren't
-    // guaranteed to be empty - they may contain garbage).
-    // This is here to avoid people getting screaming feedback
-    // when they first compile a plugin, but obviously you don't need to keep
-    // this code if your algorithm always overwrites all the output channels.
-    updateADSR();
-    
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
+    
+    if (mShouldUpdate) {
+        updateADSR();
+    }
+    
+    juce::MidiMessage m;
+    juce::MidiBuffer::Iterator it { midiMessages };
+    int sample;
+    
+    while (it.getNextEvent(m, sample)) {
+        if (m.isNoteOn()) {
+            mIsNotePlayed = true;
+        } else if (m.isNoteOff()) {
+            mIsNotePlayed = false;
+        }
+    }
+    
+    mSampleCount = mIsNotePlayed ? mSampleCount += buffer.getNumSamples() : 0;
 
     mSampler.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 }
@@ -212,15 +223,39 @@ void BasicSamplerAudioProcessor::loadFile(const juce::String &path)
     range.setRange(0, 128, true);
     
     mSampler.addSound(new SamplerSound("Sample", *mFormatReader, range, 60, 0.0, 0.1, 10.0));
+    
+    updateADSR();
 }
 
 void BasicSamplerAudioProcessor::updateADSR()
 {
+    mADSRParams.attack = mAPVTS.getRawParameterValue("ATTACK")->load();
+    mADSRParams.decay = mAPVTS.getRawParameterValue("DECAY")->load();
+    mADSRParams.sustain = mAPVTS.getRawParameterValue("SUSTAIN")->load();
+    mADSRParams.release = mAPVTS.getRawParameterValue("RELEASE")->load();
+    
     for (int i = 0; i < mSampler.getNumSounds(); ++i) {
         if (auto sound = dynamic_cast<juce::SamplerSound*>(mSampler.getSound(i).get())) {
             sound->setEnvelopeParameters(mADSRParams);
         }
     }
+}
+
+juce::AudioProcessorValueTreeState::ParameterLayout BasicSamplerAudioProcessor::createParameters() 
+{
+    std::vector<std::unique_ptr<juce::RangedAudioParameter>> parameters;
+    
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{ "ATTACK", 1 }, "Attack", 0.0f, 5.0f, 0.0f));
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{ "DECAY", 1 }, "Decay", 0.0f, 3.0f, 2.0f));
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{ "SUSTAIN", 1 }, "Sustain", 0.0f, 1.0f, 1.0f));
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{ "RELEASE", 1 }, "Release", 0.0f, 5.0f, 2.0f));
+    
+    return { parameters.begin(), parameters.end() };
+}
+
+void BasicSamplerAudioProcessor::valueTreePropertyChanged(juce::ValueTree &treeWhosePropertyHasChanged, const juce::Identifier &property)
+{
+    mShouldUpdate = true;
 }
 
 //==============================================================================
