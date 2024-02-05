@@ -23,7 +23,7 @@ ADSRComponent::ADSRComponent(BasicSamplerAudioProcessor& p) : audioProcessor(p)
     
     mAttackLabel.setFont(10.0f);
     mAttackLabel.setText("Attack", juce::NotificationType::dontSendNotification);
-    mAttackLabel.setColour(juce::Label::ColourIds::textColourId, juce::Colours::green);
+    mAttackLabel.setColour(juce::Label::ColourIds::textColourId, juce::Colours::black);
     mAttackLabel.setJustificationType(juce::Justification::centred);
     mAttackLabel.attachToComponent(&mAttackSlider, false);
     
@@ -38,7 +38,7 @@ ADSRComponent::ADSRComponent(BasicSamplerAudioProcessor& p) : audioProcessor(p)
     
     mDecayLabel.setFont(10.0f);
     mDecayLabel.setText("Decay", juce::NotificationType::dontSendNotification);
-    mDecayLabel.setColour(juce::Label::ColourIds::textColourId, juce::Colours::green);
+    mDecayLabel.setColour(juce::Label::ColourIds::textColourId, juce::Colours::black);
     mDecayLabel.setJustificationType(juce::Justification::centred);
     mDecayLabel.attachToComponent(&mDecaySlider, false);
     
@@ -53,7 +53,7 @@ ADSRComponent::ADSRComponent(BasicSamplerAudioProcessor& p) : audioProcessor(p)
     
     mSustainLabel.setFont(10.0f);
     mSustainLabel.setText("Sustain", juce::NotificationType::dontSendNotification);
-    mSustainLabel.setColour(juce::Label::ColourIds::textColourId, juce::Colours::green);
+    mSustainLabel.setColour(juce::Label::ColourIds::textColourId, juce::Colours::black);
     mSustainLabel.setJustificationType(juce::Justification::centred);
     mSustainLabel.attachToComponent(&mSustainSlider, false);
     
@@ -68,7 +68,7 @@ ADSRComponent::ADSRComponent(BasicSamplerAudioProcessor& p) : audioProcessor(p)
     
     mReleaseLabel.setFont(10.0f);
     mReleaseLabel.setText("Release", juce::NotificationType::dontSendNotification);
-    mReleaseLabel.setColour(juce::Label::ColourIds::textColourId, juce::Colours::green);
+    mReleaseLabel.setColour(juce::Label::ColourIds::textColourId, juce::Colours::black);
     mReleaseLabel.setJustificationType(juce::Justification::centred);
     mReleaseLabel.attachToComponent(&mReleaseSlider, false);
     
@@ -82,7 +82,7 @@ ADSRComponent::~ADSRComponent()
 
 void ADSRComponent::paint (juce::Graphics& g)
 {
-    g.fillAll(juce::Colours::black);
+    g.fillAll(juce::Colours::white);
 }
 
 void ADSRComponent::resized()

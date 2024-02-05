@@ -20,6 +20,10 @@
             file="Source/PluginEditor.cpp"/>
       <FILE id="zzkXIs" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
     </GROUP>
+    <GROUP id="{D83FC73F-B375-8160-E9BF-EE52555BB6E1}" name="Resources">
+      <FILE id="khNMs7" name="PsycheCOVERHalfReso.png" compile="0" resource="1"
+            file="Resources/PsycheCOVERHalfReso.png"/>
+    </GROUP>
   </MAINGROUP>
   <MODULES>
     <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
